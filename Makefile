@@ -36,6 +36,7 @@ C_INCLUDES = \
 C_SOURCES = \
 	src/main.c \
 	src/board_keysatron.c \
+	src/famak_config.c \
 	src/layout_engine.c \
 	src/usb_descriptors.c \
 	src/system_stm32f4xx.c \

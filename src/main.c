@@ -48,6 +48,13 @@ static void trigger_activation_indication(bool active) {
   mode_blink_prev_ms = board_millis();
 }
 
+static void trigger_profile_indication(famak_profile_t profile) {
+  // 1 blink for Linux (keyd), 2 blinks for Windows (AHK)
+  mode_blink_remaining = (profile + 1) * 2;
+  board_led_write(true);
+  mode_blink_prev_ms = board_millis();
+}
+
 static void led_task(void) {
   uint32_t now = board_millis();
 
@@ -165,12 +172,14 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
     uint8_t out_modifier = 0;
     uint8_t out_keys[6] = {0};
 
-    // Process German ISO to Famak (4 layers: Normal, Sym, Nav, Exo)
-    bool state_changed = layout_process_report(in_report->modifier, in_report->keycode,
-                                               &out_modifier, out_keys);
+    // Process German ISO to Famak (Linux keyd or Windows AHK profiles)
+    layout_event_t event = layout_process_report(in_report->modifier, in_report->keycode,
+                                                 &out_modifier, out_keys);
 
-    if (state_changed) {
+    if (event == LAYOUT_EVENT_ACTIVATION_CHANGED) {
       trigger_activation_indication(layout_is_active());
+    } else if (event == LAYOUT_EVENT_PROFILE_CHANGED) {
+      trigger_profile_indication(layout_get_profile());
     }
 
     // Toggle onboard LED on every key event received from keyboard
