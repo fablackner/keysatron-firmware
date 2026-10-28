@@ -1,0 +1,17 @@
+# Build outputs
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.bin
+*.hex
+*.elf
+*.map
+*.lst
+*.o
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
