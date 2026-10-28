@@ -67,14 +67,14 @@ static const map_entry_t layer_tables[FAMAK_LAYER_COUNT][256] = {
     [HID_KEY_C]                   = { HID_KEY_D,              0, FLAG_PASS_MODS },            // d
     [HID_KEY_V]                   = { HID_KEY_V,              0, FLAG_PASS_MODS },            // v
     [HID_KEY_B]                   = { HID_KEY_X,              0, FLAG_PASS_MODS },            // x
-    [HID_KEY_N]                   = { HID_KEY_GUI_LEFT,       0, 0 },                         // {leftmeta}
+    [HID_KEY_N]                   = { 0,                      KEYBOARD_MODIFIER_LEFTGUI, 0 }, // {leftmeta}
     [HID_KEY_M]                   = { HID_KEY_K,              0, FLAG_PASS_MODS },            // k
     [HID_KEY_COMMA]               = { HID_KEY_H,              0, FLAG_PASS_MODS },            // h
     [HID_KEY_PERIOD]              = { HID_KEY_8,              KEYBOARD_MODIFIER_RIGHTALT, 0 }, // [ (AltGr+8 on German)
     [HID_KEY_SLASH]               = { HID_KEY_EUROPE_1,       KEYBOARD_MODIFIER_LEFTSHIFT, 0 }, // ' (Shift+# on German) (physical -)
 
     // CapsLock -> Left Control
-    [HID_KEY_CAPS_LOCK]           = { HID_KEY_CONTROL_LEFT,   0, 0 },
+    [HID_KEY_CAPS_LOCK]           = { 0,                      KEYBOARD_MODIFIER_LEFTCTRL, 0 },
     [HID_KEY_SPACE]               = { HID_KEY_SPACE,          0, FLAG_PASS_MODS },
   },
 
@@ -106,8 +106,8 @@ static const map_entry_t layer_tables[FAMAK_LAYER_COUNT][256] = {
     [HID_KEY_O]                   = { 0, 0, FLAG_NOOP },
     [HID_KEY_P]                   = { 0, 0, FLAG_NOOP },
     [HID_KEY_BRACKET_LEFT]        = { 0, 0, FLAG_NOOP },
-    [HID_KEY_BRACKET_RIGHT]       = { HID_KEY_SHIFT_RIGHT,    0, 0 },                          // {rightshift}
-    [HID_KEY_CAPS_LOCK]           = { HID_KEY_CONTROL_LEFT,   0, 0 },
+    [HID_KEY_BRACKET_RIGHT]       = { 0,                      KEYBOARD_MODIFIER_RIGHTSHIFT, 0 }, // {rightshift}
+    [HID_KEY_CAPS_LOCK]           = { 0,                      KEYBOARD_MODIFIER_LEFTCTRL, 0 },
 
     [HID_KEY_A]                   = { HID_KEY_7,              KEYBOARD_MODIFIER_LEFTSHIFT, 0 }, // / (Shift+7)
     [HID_KEY_S]                   = { HID_KEY_9,              KEYBOARD_MODIFIER_RIGHTALT, 0 }, // ] (AltGr+9)
@@ -164,8 +164,8 @@ static const map_entry_t layer_tables[FAMAK_LAYER_COUNT][256] = {
     [HID_KEY_O]                   = { HID_KEY_8,              KEYBOARD_MODIFIER_RIGHTALT, 0 }, // [ (AltGr+8)
     [HID_KEY_P]                   = { HID_KEY_9,              KEYBOARD_MODIFIER_RIGHTALT, 0 }, // ] (AltGr+9)
     [HID_KEY_BRACKET_LEFT]        = { HID_KEY_ESCAPE,         0, 0 },                          // {Esc}
-    [HID_KEY_BRACKET_RIGHT]       = { HID_KEY_SHIFT_RIGHT,    0, 0 },                          // {rightshift}
-    [HID_KEY_CAPS_LOCK]           = { HID_KEY_CONTROL_LEFT,   0, 0 },
+    [HID_KEY_BRACKET_RIGHT]       = { 0,                      KEYBOARD_MODIFIER_RIGHTSHIFT, 0 }, // {rightshift}
+    [HID_KEY_CAPS_LOCK]           = { 0,                      KEYBOARD_MODIFIER_LEFTCTRL, 0 },
 
     [HID_KEY_A]                   = { HID_KEY_HOME,           0, 0 },                          // {Home}
     [HID_KEY_S]                   = { HID_KEY_ARROW_LEFT,     KEYBOARD_MODIFIER_LEFTCTRL, 0 }, // ^{Left}
@@ -222,8 +222,8 @@ static const map_entry_t layer_tables[FAMAK_LAYER_COUNT][256] = {
     [HID_KEY_O]                   = { HID_KEY_8,              0, 0 },                          // 8
     [HID_KEY_P]                   = { HID_KEY_9,              0, 0 },                          // 9
     [HID_KEY_BRACKET_LEFT]        = { HID_KEY_BACKSPACE,      0, 0 },                          // {Backspace}
-    [HID_KEY_BRACKET_RIGHT]       = { HID_KEY_SHIFT_RIGHT,    0, 0 },                          // {rightshift}
-    [HID_KEY_CAPS_LOCK]           = { HID_KEY_CONTROL_LEFT,   0, 0 },
+    [HID_KEY_BRACKET_RIGHT]       = { 0,                      KEYBOARD_MODIFIER_RIGHTSHIFT, 0 }, // {rightshift}
+    [HID_KEY_CAPS_LOCK]           = { 0,                      KEYBOARD_MODIFIER_LEFTCTRL, 0 },
 
     [HID_KEY_A]                   = { HID_KEY_HOME,           KEYBOARD_MODIFIER_LEFTCTRL | KEYBOARD_MODIFIER_LEFTALT, 0 }, // ^!{Home}
     [HID_KEY_S]                   = { HID_KEY_HOME,           KEYBOARD_MODIFIER_LEFTALT, 0 }, // !{Home}
@@ -405,6 +405,10 @@ bool layout_process_report(const uint8_t in_modifier, const uint8_t in_keys[6],
         combined_forced_mods |= entry.modifiers;
         has_forced_mods = true;
       }
+    } else if (entry.modifiers != 0) {
+      // Modifier-only key (e.g. N -> LeftMeta, CapsLock -> LeftCtrl, BracketRight -> RightShift)
+      combined_forced_mods |= entry.modifiers;
+      has_forced_mods = true;
     } else {
       // Unmapped key (Enter, Arrows, Esc, etc.) -> pass through directly
       if (out_idx < 6) {

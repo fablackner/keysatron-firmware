@@ -12,6 +12,31 @@ static uint8_t host_dev_addr = 0;
 static uint8_t host_instance = 0;
 static bool host_keyboard_mounted = false;
 
+// HID Report Transmission Buffer
+typedef struct {
+  uint8_t modifier;
+  uint8_t keys[6];
+  bool pending;
+} keyboard_report_buffer_t;
+
+static keyboard_report_buffer_t pending_report = {0};
+
+static void send_keyboard_report(uint8_t modifier, const uint8_t keys[6]) {
+  if (tud_hid_ready()) {
+    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, modifier, keys);
+    pending_report.pending = false;
+  } else {
+    // Save report to send immediately when endpoint becomes ready
+    pending_report.modifier = modifier;
+    if (keys) {
+      memcpy(pending_report.keys, keys, 6);
+    } else {
+      memset(pending_report.keys, 0, 6);
+    }
+    pending_report.pending = true;
+  }
+}
+
 // LED Blink Pattern State
 static uint32_t blink_prev_ms = 0;
 static uint32_t mode_blink_remaining = 0;
@@ -83,6 +108,12 @@ int main(void) {
     // TinyUSB Device task
     tud_task();
 
+    // Flush pending report if endpoint became ready
+    if (pending_report.pending && tud_hid_ready()) {
+      tud_hid_keyboard_report(REPORT_ID_KEYBOARD, pending_report.modifier, pending_report.keys);
+      pending_report.pending = false;
+    }
+
     // Status LED handler
     led_task();
   }
@@ -119,10 +150,8 @@ void tuh_hid_umount_cb(uint8_t dev_addr, uint8_t instance) {
     host_instance = 0;
 
     // Send empty report to PC so no stuck keys remain
-    if (tud_hid_ready()) {
-      uint8_t empty_keys[6] = {0};
-      tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, empty_keys);
-    }
+    uint8_t empty_keys[6] = {0};
+    send_keyboard_report(0, empty_keys);
   }
 }
 
@@ -144,19 +173,38 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
       trigger_activation_indication(layout_is_active());
     }
 
-    // Forward translated report to PC
-    if (tud_hid_ready()) {
-      tud_hid_keyboard_report(REPORT_ID_KEYBOARD, out_modifier, out_keys);
-    }
+    // Toggle onboard LED on every key event received from keyboard
+    board_led_toggle();
+
+    // Forward translated report to PC via buffered transmission
+    send_keyboard_report(out_modifier, out_keys);
   }
 
   // Request next report from keyboard
   tuh_hid_receive_report(dev_addr, instance);
 }
 
+// Invoked when a report transfer from keyboard failed (re-arm polling)
+void tuh_hid_report_failed_cb(uint8_t dev_addr, uint8_t instance, xfer_result_t result) {
+  (void) result;
+  tuh_hid_receive_report(dev_addr, instance);
+}
+
 //--------------------------------------------------------------------+
 // TinyUSB Device Callbacks (Port 1 - USB_PC)
 //--------------------------------------------------------------------+
+
+// Invoked when sent report successfully to PC
+void tud_hid_report_complete_cb(uint8_t instance, uint8_t const* report, uint16_t len) {
+  (void) instance;
+  (void) report;
+  (void) len;
+
+  if (pending_report.pending && tud_hid_ready()) {
+    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, pending_report.modifier, pending_report.keys);
+    pending_report.pending = false;
+  }
+}
 
 // Invoked when received GET_REPORT control request
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t* buffer, uint16_t reqlen) {
