@@ -134,22 +134,27 @@ layout_event_t layout_process_report(const uint8_t in_modifier, const uint8_t in
     current_layer = FAMAK_LAYER_NORMAL;
   }
 
-  // Determine user shift state
-  bool user_shifted = ((in_modifier & (KEYBOARD_MODIFIER_LEFTSHIFT | KEYBOARD_MODIFIER_RIGHTSHIFT)) != 0) || shift_pressed;
-
-  // Initialize output modifiers (strip RightAlt if it's consumed as Nav layer trigger)
+  // Initialize output modifiers
   uint8_t active_mods = in_modifier;
   if (nav_pressed) {
+    // Strip RightAlt if it's consumed as Nav layer trigger
     active_mods &= ~KEYBOARD_MODIFIER_RIGHTALT;
   }
   if (capslock_pressed) {
     active_mods |= KEYBOARD_MODIFIER_LEFTCTRL;
   }
+  if (shift_pressed) {
+    active_mods |= KEYBOARD_MODIFIER_LEFTSHIFT;
+  }
+
+  // Determine user shift state
+  bool user_shifted = (active_mods & (KEYBOARD_MODIFIER_LEFTSHIFT | KEYBOARD_MODIFIER_RIGHTSHIFT)) != 0;
 
   // 4. Process each non-layer key
   uint8_t out_idx = 0;
   uint8_t combined_forced_mods = 0;
   bool has_forced_mods = false;
+  bool pass_user_mods = false;
 
   for (int i = 0; i < 6; i++) {
     uint8_t in_k = in_keys[i];
@@ -186,12 +191,11 @@ layout_event_t layout_process_report(const uint8_t in_modifier, const uint8_t in
         out_keys[out_idx++] = entry.keycode;
       }
       if (entry.flags & FLAG_PASS_MODS) {
-        // Normal letter/key: pass user modifiers (including Shift)
-        if (user_shifted) {
-          active_mods |= KEYBOARD_MODIFIER_LEFTSHIFT;
+        pass_user_mods = true;
+        if (entry.modifiers != 0) {
+          combined_forced_mods |= entry.modifiers;
         }
       } else {
-        // Forced modifier key (e.g. shortcuts, symbols with AltGr, etc.)
         combined_forced_mods |= entry.modifiers;
         has_forced_mods = true;
       }
@@ -204,9 +208,7 @@ layout_event_t layout_process_report(const uint8_t in_modifier, const uint8_t in
       if (out_idx < 6) {
         out_keys[out_idx++] = in_k;
       }
-      if (user_shifted) {
-        active_mods |= KEYBOARD_MODIFIER_LEFTSHIFT;
-      }
+      pass_user_mods = true;
     }
   }
 
@@ -216,7 +218,9 @@ layout_event_t layout_process_report(const uint8_t in_modifier, const uint8_t in
   }
 
   // Combine modifiers:
-  if (has_forced_mods) {
+  if (pass_user_mods) {
+    *out_modifier = combined_forced_mods | active_mods;
+  } else if (has_forced_mods) {
     *out_modifier = combined_forced_mods | (active_mods & (KEYBOARD_MODIFIER_LEFTCTRL | KEYBOARD_MODIFIER_LEFTALT | KEYBOARD_MODIFIER_LEFTGUI | KEYBOARD_MODIFIER_RIGHTGUI));
   } else {
     *out_modifier = active_mods;

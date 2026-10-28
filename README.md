@@ -67,41 +67,42 @@ Normal (Base)  <--  [#] key  -->  Sym Layer
 ---
 
 ### 2. Sym Layer (Hold `#`)
-Instant access to symbols and program shortcuts:
+Instant access to symbols matching the FAMAK reference layout:
 * `1`..`0`, `ß`, `´` &rarr; `Ctrl + 1` through `Ctrl + 12`
 * `Q` &rarr; `~` (Tilde, `AltGr + +`)
 * `W` &rarr; `!` (Exclamation mark, `Shift + 1`)
 * `E` &rarr; `/` (Slash, `Shift + 7`)
 * `R` &rarr; `|` (Pipe, `AltGr + <`)
 * `T` &rarr; `&` (Ampersand, `Shift + 6`)
-* `A` &rarr; `/`
-* `S` &rarr; `]` (AltGr + 9)
-* `D` &rarr; `*` (Shift + +)
-* `F` &rarr; `.`
-* `G` &rarr; `,`
-* `H` &rarr; `\` (AltGr + ß)
-* `J` &rarr; `=` (Shift + 0)
-* `K` &rarr; `\`
-* `L` &rarr; `` ` `` (Backtick, Shift + ´)
-* `<` &rarr; `<`
-* `Y` &rarr; `\`
-* `X` &rarr; `>` (Shift + <)
-* `C` &rarr; `=`
-* `V` &rarr; `;`
-* `B` &rarr; `_`
-* `,` &rarr; `%` (Shift + 5)
-* `Space` &rarr; `>`
+* `A` &rarr; `-` (Minus)
+* `S` (FAMAK `r`) &rarr; `+` (Plus)
+* `D` (FAMAK `s`) &rarr; `*` (Asterisk, `Shift + +`)
+* `F` (FAMAK `t`) &rarr; `.` (Period)
+* `G` (FAMAK `g`) &rarr; `,` (Comma)
+* `J` (FAMAK `m`) &rarr; `` ` `` (Backtick, `Shift + ´`)
+* `K` (FAMAK `n`) &rarr; `\` (Backslash, `AltGr + ß`)
+* `L` (FAMAK `e`) &rarr; `^` (Caret)
+* `Ö` (FAMAK `i`) &rarr; `´` (Acute)
+* `Ä` (FAMAK `o`) &rarr; `°` (Degree, `Shift + ^`)
+* `<` &rarr; `<` (Less-than)
+* `Y` (FAMAK `;`) &rarr; `#` (Hash)
+* `X` (FAMAK `f`) &rarr; `>` (Greater-than, `Shift + <`)
+* `C` (FAMAK `d`) &rarr; `=` (Equals, `Shift + 0`)
+* `V` (FAMAK `v`) &rarr; `;` (Semicolon, `Shift + ,`)
+* `B` (FAMAK `x`) &rarr; `?` (Question mark, `Shift + ß`)
+* `,` (FAMAK `h`) &rarr; `%` (Percent, `Shift + 5`)
+* `Space` &rarr; `:` (Colon, `Shift + .`)
 * `AltGr` in Sym &rarr; Transitions to **Exo Layer**
 
 ---
 
 ### 3. Nav Layer (Hold `AltGr`)
-Full navigation and editing cluster:
+Full navigation and editing cluster (holding `+` or `Shift` allows text selection across all movement keys):
 * `1`..`9` &rarr; Linux: `Super + 1`..`9` / Windows: `Alt + 1`..`9`
 * `0`, `-`, `=` &rarr; Linux: `Super + Alt + 0`..`2` / Windows: `Alt + 0`..`2`
 * `Backspace` &rarr; `Alt + F4` (Close window)
 * `Q` &rarr; `Ctrl + Alt + w`
-* `W`, `E`, `R`, `D` &rarr; `Left`, `Up`, `Right`, `Down` (Inverted-T arrow cluster)
+* `W`, `E`, `R`, `D` &rarr; `Left`, `Up`, `Right`, `Down` (Inverted-T arrow cluster; with Shift: text selection!)
 * `T` &rarr; `Ctrl + Alt + t` (Terminal launcher)
 * `Y` &rarr; `Mute`
 * `U` &rarr; `Brightness Down` (`F14`)
@@ -109,17 +110,17 @@ Full navigation and editing cluster:
 * `O` &rarr; `[`
 * `P` &rarr; `]`
 * `Ü` &rarr; `Escape`
-* `A` &rarr; `Home`
-* `S` &rarr; `Ctrl + Left` (Word back)
-* `F` &rarr; `Ctrl + Right` (Word forward)
-* `G` &rarr; `End`
+* `A` &rarr; `Home` (with Shift: select to line start)
+* `S` &rarr; `Ctrl + Left` (Word back; with Shift: `Ctrl + Shift + Left` word select)
+* `F` &rarr; `Ctrl + Right` (Word forward; with Shift: `Ctrl + Shift + Right` word select)
+* `G` &rarr; `End` (with Shift: select to line end)
 * `K` &rarr; `(` (Shift + 8)
 * `L` &rarr; `)` (Shift + 9)
 * `Ö` &rarr; `Ctrl + l`
 * `Ä` &rarr; `Delete`
 * `<` &rarr; `$` (Shift + 4)
 * `Y` &rarr; `Insert`
-* `X` &rarr; `?` (Shift + ß)
+* `X` &rarr; `'` (Shift + #)
 * `C` &rarr; `Alt + PageDown`
 * `V` &rarr; `Alt + PageUp`
 * `B` &rarr; `"` (Shift + 2)
