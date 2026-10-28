@@ -17,11 +17,8 @@ static uint32_t blink_prev_ms = 0;
 static uint32_t mode_blink_remaining = 0;
 static uint32_t mode_blink_prev_ms = 0;
 
-static void trigger_mode_indication(layout_mode_t mode) {
-  // Mode 0: 1 flash
-  // Mode 1: 2 flashes
-  // Mode 2: 3 flashes
-  mode_blink_remaining = (mode + 1) * 2;
+static void trigger_activation_indication(bool active) {
+  mode_blink_remaining = active ? 4 : 2; // 2 fast blinks for active, 1 long blink for stopped
   board_led_write(true);
   mode_blink_prev_ms = board_millis();
 }
@@ -30,7 +27,7 @@ static void led_task(void) {
   uint32_t now = board_millis();
 
   if (mode_blink_remaining > 0) {
-    if (now - mode_blink_prev_ms >= 100) {
+    if (now - mode_blink_prev_ms >= 120) {
       mode_blink_prev_ms = now;
       mode_blink_remaining--;
       board_led_toggle();
@@ -38,8 +35,14 @@ static void led_task(void) {
     return;
   }
 
-  // Normal heartbeat: 1000ms if keyboard connected, 250ms fast blink if waiting for keyboard
-  uint32_t interval = host_keyboard_mounted ? 1000 : 250;
+  // Normal heartbeat: 1000ms when famak is active, 250ms when waiting for keyboard, 2000ms when stopped
+  uint32_t interval = 1000;
+  if (!host_keyboard_mounted) {
+    interval = 250;
+  } else if (!layout_is_active()) {
+    interval = 2000;
+  }
+
   if (now - blink_prev_ms >= interval) {
     blink_prev_ms = now;
     board_led_toggle();
@@ -133,12 +136,12 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
     uint8_t out_modifier = 0;
     uint8_t out_keys[6] = {0};
 
-    // Process German ISO to Colemak ISO translation
-    bool mode_changed = layout_process_report(in_report->modifier, in_report->keycode,
-                                              &out_modifier, out_keys);
+    // Process German ISO to Famak (4 layers: Normal, Sym, Nav, Exo)
+    bool state_changed = layout_process_report(in_report->modifier, in_report->keycode,
+                                               &out_modifier, out_keys);
 
-    if (mode_changed) {
-      trigger_mode_indication(layout_get_mode());
+    if (state_changed) {
+      trigger_activation_indication(layout_is_active());
     }
 
     // Forward translated report to PC
