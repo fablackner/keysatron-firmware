@@ -38,7 +38,27 @@ This firmware implements hardware translation from **German ISO (QWERTZ)** to **
 
 ---
 
-## Building
+## Building and Flashing via Docker (Recommended)
+
+To avoid installing cross-compilers or flashing tools directly on your host operating system, a self-contained container environment is provided.
+
+```bash
+# Build firmware inside container:
+./docker-run.sh build
+
+# Flash firmware to the connected STM32 board via ST-Link:
+./docker-run.sh flash
+
+# Clean build artifacts:
+./docker-run.sh clean
+
+# Open an interactive shell inside the container:
+./docker-run.sh shell
+```
+
+---
+
+## Building Directly on Host (Optional)
 
 ### Requirements
 - ARM GNU Toolchain (`arm-none-eabi-gcc`, `arm-none-eabi-binutils`)
@@ -56,18 +76,10 @@ Outputs will be generated in `build/`:
 
 ---
 
-## Flashing with ST-Link
+## Flashing Directly on Host (Optional)
 
-### Quick Flash
 ```bash
-# Using OpenOCD (recommended):
 make flash
-
-# Or using probe-rs:
-make flash-probe-rs
-
-# Or run the automatic flashing script:
-./flash.sh
 ```
 
 ---

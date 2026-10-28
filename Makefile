@@ -98,9 +98,12 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 flash: all
-	openocd -f openocd.cfg -c "program $(BUILD_DIR)/$(TARGET).bin reset exit 0x08000000"
+	openocd -f openocd.cfg -c "init; reset halt; program $(BUILD_DIR)/$(TARGET).bin verify reset exit 0x08000000"
 
-flash-probe-rs: all
-	probe-rs download --chip STM32F405RG $(BUILD_DIR)/$(TARGET).bin --binary-format bin --base-address 0x08000000 --reset-after-flashing
+docker-build:
+	./docker-run.sh build
+
+docker-flash:
+	./docker-run.sh flash
 
 .PHONY: all clean flash flash-probe-rs
