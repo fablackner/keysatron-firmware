@@ -27,7 +27,7 @@ case "$ACTION" in
             -v /dev/bus/usb:/dev/bus/usb \
             -v "$DIR":/workspace \
             "$IMAGE_NAME" \
-            openocd -f openocd.cfg -c "init; reset halt; program build/keysatron-firmware.bin verify reset exit 0x08000000"
+            openocd -f openocd.cfg -c "init; reset halt; program build/keysatron-firmware.bin verify 0x08000000; reset run; sleep 200; exit"
         ;;
     shell)
         echo "==> Starting interactive container shell..."

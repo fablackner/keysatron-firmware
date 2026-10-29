@@ -6,6 +6,7 @@
 #include "layout_engine.h"
 #include "usb_descriptors.h"
 #include "tusb.h"
+#include "host/hcd.h"
 
 // Active host keyboard instance
 static uint8_t host_dev_addr = 0;
@@ -119,6 +120,17 @@ int main(void) {
     if (pending_report.pending && tud_hid_ready()) {
       tud_hid_keyboard_report(REPORT_ID_KEYBOARD, pending_report.modifier, pending_report.keys);
       pending_report.pending = false;
+    }
+
+    // Auto-attach detection: if a physical keyboard is plugged into USB_IN but not yet mounted,
+    // notify TinyUSB stack so it resets the root port and enumerates without requiring manual replug.
+    static uint32_t last_attach_check_ms = 0;
+    uint32_t now = board_millis();
+    if (!host_keyboard_mounted && (now - last_attach_check_ms >= 500)) {
+      last_attach_check_ms = now;
+      if (hcd_port_connect_status(BOARD_TUH_RHPORT)) {
+        hcd_event_device_attach(BOARD_TUH_RHPORT, false);
+      }
     }
 
     // Status LED handler
