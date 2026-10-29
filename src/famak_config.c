@@ -52,8 +52,8 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_APOSTROPHE]          = { HID_KEY_O,              0, FLAG_PASS_MODS },            // ' = o (physical Ä)
 
       // Row 4
-      [HID_KEY_EUROPE_2]            = { HID_KEY_Y,              0, FLAG_PASS_MODS },            // 102nd = y (physical < key)
-      [HID_KEY_Z]                   = { HID_KEY_COMMA,          KEYBOARD_MODIFIER_LEFTSHIFT, 0 }, // z = ; (physical Y key -> Shift+, on German)
+      [HID_KEY_EUROPE_2]            = { HID_KEY_Y,              0, FLAG_PASS_MODS },            // 102nd = z / Z (physical < key)
+      [HID_KEY_Z]                   = { HID_KEY_SEMICOLON,      0, FLAG_PASS_MODS },            // z = ö / Ö (physical Y key -> ö on German)
       [HID_KEY_X]                   = { HID_KEY_F,              0, FLAG_PASS_MODS },            // x = f
       [HID_KEY_C]                   = { HID_KEY_D,              0, FLAG_PASS_MODS },            // c = d
       [HID_KEY_V]                   = { HID_KEY_V,              0, FLAG_PASS_MODS },            // v = v
@@ -61,8 +61,8 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_N]                   = { 0,                      KEYBOARD_MODIFIER_LEFTGUI, 0 }, // n = leftmeta
       [HID_KEY_M]                   = { HID_KEY_K,              0, FLAG_PASS_MODS },            // m = k
       [HID_KEY_COMMA]               = { HID_KEY_H,              0, FLAG_PASS_MODS },            // , = h
-      [HID_KEY_PERIOD]              = { HID_KEY_8,              KEYBOARD_MODIFIER_RIGHTALT, 0 }, // . = [ (AltGr+8 on German)
-      [HID_KEY_SLASH]               = { HID_KEY_EUROPE_1,       KEYBOARD_MODIFIER_LEFTSHIFT, 0 }, // / = ' (Shift+# on German) (physical - key)
+      [HID_KEY_PERIOD]              = { HID_KEY_BRACKET_LEFT,   0, FLAG_PASS_MODS },            // . = ü / Ü (physical . key -> ü on German)
+      [HID_KEY_SLASH]               = { HID_KEY_APOSTROPHE,     0, FLAG_PASS_MODS },            // / = ä / Ä (physical - key -> ä on German)
       [HID_KEY_SPACE]               = { HID_KEY_SPACE,          0, FLAG_PASS_MODS },
     },
 
@@ -235,7 +235,7 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_M]                   = { HID_KEY_1,              0, FLAG_PASS_MODS },            // m = 1
       [HID_KEY_COMMA]               = { HID_KEY_2,              0, FLAG_PASS_MODS },            // , = 2
       [HID_KEY_PERIOD]              = { HID_KEY_3,              0, FLAG_PASS_MODS },            // . = 3
-      [HID_KEY_SLASH]               = { HID_KEY_SLASH,          0, FLAG_PASS_MODS },            // / = -
+      [HID_KEY_SLASH]               = { HID_KEY_MINUS,          0, FLAG_PASS_MODS },            // / = ß (HID_KEY_MINUS on German layout produces ß)
       [HID_KEY_SPACE]               = { HID_KEY_W,              KEYBOARD_MODIFIER_LEFTGUI | KEYBOARD_MODIFIER_LEFTALT, 0 }, // space = M-A-w (Super+Alt+w)
     },
   },
@@ -270,7 +270,7 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_U]                   = { HID_KEY_J,              0, FLAG_PASS_MODS },            // j
       [HID_KEY_I]                   = { HID_KEY_L,              0, FLAG_PASS_MODS },            // l
       [HID_KEY_O]                   = { HID_KEY_U,              0, FLAG_PASS_MODS },            // u
-      [HID_KEY_P]                   = { HID_KEY_Y,              0, FLAG_PASS_MODS },            // z (German Windows produces z for scancode Y)
+      [HID_KEY_P]                   = { HID_KEY_Z,              0, FLAG_PASS_MODS },            // y / Y (German layout produces y for scancode Z)
       [HID_KEY_BRACKET_LEFT]        = { HID_KEY_BACKSPACE,      0, 0 },                         // {Backspace}
       [HID_KEY_BRACKET_RIGHT]       = { 0,                      KEYBOARD_MODIFIER_RIGHTSHIFT, 0 }, // Shift
 
@@ -287,8 +287,8 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_SEMICOLON]           = { HID_KEY_I,              0, FLAG_PASS_MODS },            // i
       [HID_KEY_APOSTROPHE]          = { HID_KEY_O,              0, FLAG_PASS_MODS },            // o
 
-      [HID_KEY_EUROPE_2]            = { HID_KEY_Z,              0, FLAG_PASS_MODS },            // y (German Windows produces y for scancode Z)
-      [HID_KEY_Z]                   = { HID_KEY_COMMA,          KEYBOARD_MODIFIER_LEFTSHIFT, 0 }, // ;
+      [HID_KEY_EUROPE_2]            = { HID_KEY_Y,              0, FLAG_PASS_MODS },            // z / Z (German layout produces z for scancode Y)
+      [HID_KEY_Z]                   = { HID_KEY_SEMICOLON,      0, FLAG_PASS_MODS },            // ö / Ö (German layout produces ö for scancode ;)
       [HID_KEY_X]                   = { HID_KEY_F,              0, FLAG_PASS_MODS },            // f
       [HID_KEY_C]                   = { HID_KEY_D,              0, FLAG_PASS_MODS },            // d
       [HID_KEY_V]                   = { HID_KEY_V,              0, FLAG_PASS_MODS },            // v
@@ -296,8 +296,8 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_N]                   = { 0,                      KEYBOARD_MODIFIER_LEFTGUI, 0 }, // {leftmeta}
       [HID_KEY_M]                   = { HID_KEY_K,              0, FLAG_PASS_MODS },            // k
       [HID_KEY_COMMA]               = { HID_KEY_H,              0, FLAG_PASS_MODS },            // h
-      [HID_KEY_PERIOD]              = { HID_KEY_8,              KEYBOARD_MODIFIER_RIGHTALT, 0 }, // [
-      [HID_KEY_SLASH]               = { HID_KEY_EUROPE_1,       KEYBOARD_MODIFIER_LEFTSHIFT, 0 }, // '
+      [HID_KEY_PERIOD]              = { HID_KEY_BRACKET_LEFT,   0, FLAG_PASS_MODS },            // ü / Ü (German layout produces ü for scancode [)
+      [HID_KEY_SLASH]               = { HID_KEY_APOSTROPHE,     0, FLAG_PASS_MODS },            // ä / Ä (German layout produces ä for scancode ')
       [HID_KEY_SPACE]               = { HID_KEY_SPACE,          0, FLAG_PASS_MODS },
     },
 
@@ -470,7 +470,7 @@ const map_entry_t famak_profiles[FAMAK_PROFILE_COUNT][FAMAK_LAYER_COUNT][256] = 
       [HID_KEY_M]                   = { HID_KEY_1,              0, FLAG_PASS_MODS },            // 1
       [HID_KEY_COMMA]               = { HID_KEY_2,              0, FLAG_PASS_MODS },            // 2
       [HID_KEY_PERIOD]              = { HID_KEY_3,              0, FLAG_PASS_MODS },            // 3
-      [HID_KEY_SLASH]               = { HID_KEY_SLASH,          0, FLAG_PASS_MODS },            // -
+      [HID_KEY_SLASH]               = { HID_KEY_MINUS,          0, FLAG_PASS_MODS },            // ß (German layout produces ß for scancode -)
       [HID_KEY_SPACE]               = { HID_KEY_W,              KEYBOARD_MODIFIER_LEFTALT, 0 }, // !w
     },
   }

@@ -43,10 +43,17 @@ Normal (Base)  <--  [#] key  -->  Sym Layer
 ```
 
 ### 1. Normal Layer (Base)
-* **Alpha rows (FAMAK):**
-  * Row 2: `q  w  c  p  b  [VolDown]  j  l  u  z  [BS]`
+* **Alpha rows (FAMAK Colemak-DH wide ISO):**
+  * Row 2: `q  w  c  p  b  [VolDown]  j  l  u  y  [BS]`
   * Row 3: `a  r  s  t  g  [C-A-h]    m  n  e  i  o`
-  * Row 4: `y  ;  f  d  v  x  [LWin]  k  h  [  '`
+  * Row 4: `z  ö  f  d  v  x  [LWin]  k  h  ü  ä`
+* **German Umlauts & Special Characters:**
+  * Physical `Y` (US `Z`) &rarr; **`ö` / `Ö`** (Shift + `Y`)
+  * Physical `.` &rarr; **`ü` / `Ü`** (Shift + `.`)
+  * Physical `-` (US `/`) &rarr; **`ä` / `Ä`** (Shift + `-`)
+  * Physical `<` (102nd) &rarr; **`z` / `Z`**
+  * Physical `P` (US `P`) &rarr; **`y` / `Y`**
+  * In Exo layer (Hold `Tab`): Physical `-` &rarr; **`ß`**
 * **Number row shortcuts:**
   * `1` &rarr; `Alt + Left` (Browser Back)
   * `2` &rarr; `Alt + Right` (Browser Forward)
@@ -150,7 +157,7 @@ System control, function keys, and numpad:
 * `U` &rarr; `@` (AltGr + q)
 * `I`, `O`, `P` &rarr; `7`, `8`, `9` (Numpad top row)
 * `K`, `L`, `Ö`, `Ä` &rarr; `4`, `5`, `6`, `0` (Numpad middle row)
-* `M`, `,`, `.`, `-` &rarr; `1`, `2`, `3`, `-` (Numpad bottom row)
+* `M`, `,`, `.`, `-` &rarr; `1`, `2`, `3`, `ß` (Numpad bottom row & `ß`)
 * `J` &rarr; `.`
 * `A` &rarr; `Ctrl + Alt + Home`
 * `S` &rarr; `Alt + Home`
